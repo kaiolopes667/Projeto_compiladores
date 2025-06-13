@@ -1,0 +1,232 @@
+Created by PLY version 3.11 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> programa
+Rule 1     programa -> INICIO comandos FIM
+Rule 2     comandos -> comandos comando
+Rule 3     comandos -> comando
+Rule 4     comando -> LEVANTAR_CANETA
+Rule 5     comando -> BAIXAR_CANETA
+Rule 6     comando -> AVANCAR NUMERO
+Rule 7     comando -> VOLTAR NUMERO
+Rule 8     comando -> GIRAR_DIREITA NUMERO
+Rule 9     comando -> GIRAR_ESQUERDA NUMERO
+
+Terminals, with rules where they appear
+
+AVANCAR              : 6
+BAIXAR_CANETA        : 5
+FIM                  : 1
+GIRAR_DIREITA        : 8
+GIRAR_ESQUERDA       : 9
+INICIO               : 1
+LEVANTAR_CANETA      : 4
+NUMERO               : 6 7 8 9
+VOLTAR               : 7
+error                : 
+
+Nonterminals, with rules where they appear
+
+comando              : 2 3
+comandos             : 1 2
+programa             : 0
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . programa
+    (1) programa -> . INICIO comandos FIM
+
+    INICIO          shift and go to state 2
+
+    programa                       shift and go to state 1
+
+state 1
+
+    (0) S' -> programa .
+
+
+
+state 2
+
+    (1) programa -> INICIO . comandos FIM
+    (2) comandos -> . comandos comando
+    (3) comandos -> . comando
+    (4) comando -> . LEVANTAR_CANETA
+    (5) comando -> . BAIXAR_CANETA
+    (6) comando -> . AVANCAR NUMERO
+    (7) comando -> . VOLTAR NUMERO
+    (8) comando -> . GIRAR_DIREITA NUMERO
+    (9) comando -> . GIRAR_ESQUERDA NUMERO
+
+    LEVANTAR_CANETA shift and go to state 5
+    BAIXAR_CANETA   shift and go to state 6
+    AVANCAR         shift and go to state 7
+    VOLTAR          shift and go to state 8
+    GIRAR_DIREITA   shift and go to state 9
+    GIRAR_ESQUERDA  shift and go to state 10
+
+    comandos                       shift and go to state 3
+    comando                        shift and go to state 4
+
+state 3
+
+    (1) programa -> INICIO comandos . FIM
+    (2) comandos -> comandos . comando
+    (4) comando -> . LEVANTAR_CANETA
+    (5) comando -> . BAIXAR_CANETA
+    (6) comando -> . AVANCAR NUMERO
+    (7) comando -> . VOLTAR NUMERO
+    (8) comando -> . GIRAR_DIREITA NUMERO
+    (9) comando -> . GIRAR_ESQUERDA NUMERO
+
+    FIM             shift and go to state 11
+    LEVANTAR_CANETA shift and go to state 5
+    BAIXAR_CANETA   shift and go to state 6
+    AVANCAR         shift and go to state 7
+    VOLTAR          shift and go to state 8
+    GIRAR_DIREITA   shift and go to state 9
+    GIRAR_ESQUERDA  shift and go to state 10
+
+    comando                        shift and go to state 12
+
+state 4
+
+    (3) comandos -> comando .
+
+    FIM             reduce using rule 3 (comandos -> comando .)
+    LEVANTAR_CANETA reduce using rule 3 (comandos -> comando .)
+    BAIXAR_CANETA   reduce using rule 3 (comandos -> comando .)
+    AVANCAR         reduce using rule 3 (comandos -> comando .)
+    VOLTAR          reduce using rule 3 (comandos -> comando .)
+    GIRAR_DIREITA   reduce using rule 3 (comandos -> comando .)
+    GIRAR_ESQUERDA  reduce using rule 3 (comandos -> comando .)
+
+
+state 5
+
+    (4) comando -> LEVANTAR_CANETA .
+
+    FIM             reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    LEVANTAR_CANETA reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    BAIXAR_CANETA   reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    AVANCAR         reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    VOLTAR          reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    GIRAR_DIREITA   reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+    GIRAR_ESQUERDA  reduce using rule 4 (comando -> LEVANTAR_CANETA .)
+
+
+state 6
+
+    (5) comando -> BAIXAR_CANETA .
+
+    FIM             reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    LEVANTAR_CANETA reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    BAIXAR_CANETA   reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    AVANCAR         reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    VOLTAR          reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    GIRAR_DIREITA   reduce using rule 5 (comando -> BAIXAR_CANETA .)
+    GIRAR_ESQUERDA  reduce using rule 5 (comando -> BAIXAR_CANETA .)
+
+
+state 7
+
+    (6) comando -> AVANCAR . NUMERO
+
+    NUMERO          shift and go to state 13
+
+
+state 8
+
+    (7) comando -> VOLTAR . NUMERO
+
+    NUMERO          shift and go to state 14
+
+
+state 9
+
+    (8) comando -> GIRAR_DIREITA . NUMERO
+
+    NUMERO          shift and go to state 15
+
+
+state 10
+
+    (9) comando -> GIRAR_ESQUERDA . NUMERO
+
+    NUMERO          shift and go to state 16
+
+
+state 11
+
+    (1) programa -> INICIO comandos FIM .
+
+    $end            reduce using rule 1 (programa -> INICIO comandos FIM .)
+
+
+state 12
+
+    (2) comandos -> comandos comando .
+
+    FIM             reduce using rule 2 (comandos -> comandos comando .)
+    LEVANTAR_CANETA reduce using rule 2 (comandos -> comandos comando .)
+    BAIXAR_CANETA   reduce using rule 2 (comandos -> comandos comando .)
+    AVANCAR         reduce using rule 2 (comandos -> comandos comando .)
+    VOLTAR          reduce using rule 2 (comandos -> comandos comando .)
+    GIRAR_DIREITA   reduce using rule 2 (comandos -> comandos comando .)
+    GIRAR_ESQUERDA  reduce using rule 2 (comandos -> comandos comando .)
+
+
+state 13
+
+    (6) comando -> AVANCAR NUMERO .
+
+    FIM             reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    LEVANTAR_CANETA reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    BAIXAR_CANETA   reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    AVANCAR         reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    VOLTAR          reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    GIRAR_DIREITA   reduce using rule 6 (comando -> AVANCAR NUMERO .)
+    GIRAR_ESQUERDA  reduce using rule 6 (comando -> AVANCAR NUMERO .)
+
+
+state 14
+
+    (7) comando -> VOLTAR NUMERO .
+
+    FIM             reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    LEVANTAR_CANETA reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    BAIXAR_CANETA   reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    AVANCAR         reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    VOLTAR          reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    GIRAR_DIREITA   reduce using rule 7 (comando -> VOLTAR NUMERO .)
+    GIRAR_ESQUERDA  reduce using rule 7 (comando -> VOLTAR NUMERO .)
+
+
+state 15
+
+    (8) comando -> GIRAR_DIREITA NUMERO .
+
+    FIM             reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    LEVANTAR_CANETA reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    BAIXAR_CANETA   reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    AVANCAR         reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    VOLTAR          reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    GIRAR_DIREITA   reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+    GIRAR_ESQUERDA  reduce using rule 8 (comando -> GIRAR_DIREITA NUMERO .)
+
+
+state 16
+
+    (9) comando -> GIRAR_ESQUERDA NUMERO .
+
+    FIM             reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    LEVANTAR_CANETA reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    BAIXAR_CANETA   reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    AVANCAR         reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    VOLTAR          reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    GIRAR_DIREITA   reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+    GIRAR_ESQUERDA  reduce using rule 9 (comando -> GIRAR_ESQUERDA NUMERO .)
+
