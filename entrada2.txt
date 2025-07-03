@@ -1,0 +1,14 @@
+inicio
+var inteiro: tamanho_lado;
+tamanho_lado = 200;
+avancar tamanho_lado;
+girar_direita 144;
+avancar tamanho_lado;
+girar_direita 144;
+avancar tamanho_lado;
+girar_direita 144;
+avancar tamanho_lado;
+girar_direita 144;
+avancar tamanho_lado;
+girar_direita 144;
+fim

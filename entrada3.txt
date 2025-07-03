@@ -1,0 +1,13 @@
+inicio
+var inteiro: lado;
+var texto: cor;
+lado = 5;
+cor_de_fundo "black";
+definir_espessura 2;
+repita 50 vezes
+    definir_cor "cyan";
+    avancar lado;
+    girar_direita 90;
+    lado = lado + 5;
+fim_repita;
+fim
