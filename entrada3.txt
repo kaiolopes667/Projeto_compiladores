@@ -4,6 +4,7 @@ var texto: cor;
 lado = 5;
 cor_de_fundo "black";
 definir_espessura 2;
+ir_para 0 0;
 repita 50 vezes
     definir_cor "cyan";
     avancar lado;
