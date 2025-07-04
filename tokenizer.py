@@ -29,10 +29,11 @@ def tokenize(codigo):
     tokens = []
     linhas = codigo.split('\n')
     for num_linha, linha in enumerate(linhas, 1):
-        partes = re.findall(r'\w+|".*?"|\d+|[=;:+\-*/:]|//.*', linha)
+        linha = linha.split('//')[0]
+        partes = re.findall(r'\w+|".*?"|\d+|[=;:+\-*/:]', linha)
         for parte in partes:
-            if parte.startswith('//'):
-                break  # ignora comentários
+            if not parte.strip():
+                continue  # ignora strings vazias
             if parte in PALAVRAS_CHAVE:
                 tokens.append(Token("PALAVRA_CHAVE", parte, num_linha))
             elif parte in OPERADORES:
