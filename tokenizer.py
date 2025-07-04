@@ -22,10 +22,6 @@ OPERADORES = {
 }
 
 def tokenize(codigo):
-    """
-    Função principal de análise léxica.
-    Recebe o código fonte como string e retorna uma lista de tokens.
-    """
     tokens = []
     linhas = codigo.split('\n')
     for num_linha, linha in enumerate(linhas, 1):
