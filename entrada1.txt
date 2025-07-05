@@ -1,6 +1,14 @@
 inicio
-repita 4 vezes
-    avancar 100;
+    // Desenha as quatro arestas do quadrado
+    avancar 150;
     girar_direita 90;
-fim_repita;
+
+    avancar 150;
+    girar_direita 90;
+
+    avancar 150;
+    girar_direita 90;
+
+    avancar 150;
+    girar_direita 90;
 fim
