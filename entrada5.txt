@@ -1,0 +1,8 @@
+inicio
+var inteiro: lado;
+lado = 60;
+repita 8 vezes
+    avancar lado;
+    girar_direita 45;
+fim_repita;
+fim
