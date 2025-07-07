@@ -1,10 +1,5 @@
 inicio
-avancar 100;
-girar_direita 90;
-avancar 100;
-girar_direita 90;
-avancar 100;
-girar_direita 90;
-avancar 100;
-girar_direita 90;
+repita 4 vezes
+    avancar 100;
+    girar_direita 90;
 fim
