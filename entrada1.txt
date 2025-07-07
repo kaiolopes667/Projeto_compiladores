@@ -2,4 +2,5 @@ inicio
 repita 4 vezes
     avancar 100;
     girar_direita 90;
+fim_repita;
 fim

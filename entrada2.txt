@@ -4,4 +4,5 @@ tamanho_lado = 200;
 repita 5 vezes
     avancar tamanho_lado;
     girar_direita 144;
+fim_repita;
 fim
