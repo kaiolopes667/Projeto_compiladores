@@ -10,8 +10,9 @@ class Token:
 
 PALAVRAS_CHAVE = {
     "inicio", "fim", "var", "inteiro", "texto", "real", "logico",
-    "avancar", "girar_direita", "repita", "vezes", "se", "entao", "senao", "fim_se",
-    "definir_cor", "cor_de_fundo", "definir_espessura", "ir_para", "fim_repita"
+    "avancar", "recuar", "girar_direita", "girar_esquerda", "repita", "vezes", "se", "entao", "senao", "fim_se",
+    "definir_cor", "cor_de_fundo", "definir_espessura", "ir_para", "fim_repita",
+    "levantar_caneta", "abaixar_caneta", "limpar_tela", "esperar", "escrever"
 }
 
 OPERADORES = {
