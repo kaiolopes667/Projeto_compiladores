@@ -1,4 +1,4 @@
-from parser import parser, NodoPrograma, NodoAvancar, NodoGirarDireita, NodoDefinirCor, NodoCorDeFundo, NodoDefinirEspessura, NodoAtribuicao, NodoVar, NodoIrPara, NodoRepita, NodoBinOp
+from parser import parser, NodoAvancar, NodoGirarDireita, NodoDefinirCor, NodoCorDeFundo, NodoDefinirEspessura, NodoAtribuicao, NodoVar, NodoIrPara, NodoPrograma, NodoRepita, NodoRecuar, NodoGirarEsquerda, NodoLevantarCaneta, NodoAbaixarCaneta, NodoLimparTela, NodoEsperar, NodoEscrever
 from tokenizer import tokenize
 
 def analisar_semantica(ast, tabela_simbolos=None):
@@ -16,14 +16,21 @@ def analisar_semantica(ast, tabela_simbolos=None):
                 raise Exception(f"Variável '{comando.nome}' não declarada antes do uso.")
             tipo_var = tabela_simbolos[comando.nome]
             valor = comando.valor
-            tipo_valor = tipo_expressao(valor, tabela_simbolos)
-            if tipo_var != tipo_valor:
-                raise Exception(f"Atribuição inválida: variável '{comando.nome}' é {tipo_var}, mas expressão é {tipo_valor}.")
+            if tipo_var == "inteiro":
+                if not isinstance(valor, int):
+                    raise Exception(f"Atribuição inválida: variável '{comando.nome}' é inteiro, mas recebeu '{valor}'.")
+            elif tipo_var == "texto":
+                if not isinstance(valor, str):
+                    raise Exception(f"Atribuição inválida: variável '{comando.nome}' é texto, mas recebeu '{valor}'.")
         elif isinstance(comando, (NodoAvancar, NodoGirarDireita, NodoDefinirEspessura)):
             valor = comando.valor if hasattr(comando, 'valor') else comando.espessura
-            tipo_valor = tipo_expressao(valor, tabela_simbolos)
-            if tipo_valor != "inteiro":
-                raise Exception(f"Comando '{type(comando).__name__}' espera inteiro, mas expressão é {tipo_valor}.")
+            if isinstance(valor, str):
+                if valor not in tabela_simbolos:
+                    raise Exception(f"Variável '{valor}' não declarada antes do uso.")
+                if tabela_simbolos[valor] != "inteiro":
+                    raise Exception(f"Comando '{type(comando).__name__}' espera inteiro, mas variável '{valor}' é do tipo '{tabela_simbolos[valor]}'.")
+            elif not isinstance(valor, int):
+                raise Exception(f"Comando '{type(comando).__name__}' espera valor inteiro, mas recebeu '{valor}'.")
         elif isinstance(comando, NodoIrPara):
             if not (isinstance(comando.x, int) and isinstance(comando.y, int)):
                 raise Exception(f"Comando 'ir_para' espera dois inteiros literais, mas recebeu '{comando.x}' e '{comando.y}'.")
@@ -31,7 +38,7 @@ def analisar_semantica(ast, tabela_simbolos=None):
             if not isinstance(comando.vezes, int):
                 raise Exception(f"Estrutura 'repita' espera um número inteiro literal, não variável.")
             for filho in comando.comandos:
-                analisar_semantica(NodoPrograma([filho]), tabela_simbolos.copy())
+                analisar_semantica(NodoPrograma([filho]), tabela_simbolos)
         elif isinstance(comando, NodoDefinirCor):
             cor = comando.cor
             if not isinstance(cor, str):
@@ -40,24 +47,31 @@ def analisar_semantica(ast, tabela_simbolos=None):
             cor = comando.cor
             if not isinstance(cor, str):
                 raise Exception(f"Comando 'cor_de_fundo' espera texto, mas recebeu '{cor}'.")
+        elif isinstance(comando, (NodoRecuar, NodoGirarEsquerda)):
+            valor = comando.valor
+            if isinstance(valor, str):
+                if valor not in tabela_simbolos:
+                    raise Exception(f"Variável '{valor}' não declarada antes do uso.")
+                if tabela_simbolos[valor] != "inteiro":
+                    raise Exception(f"Comando '{type(comando).__name__}' espera inteiro, mas variável '{valor}' é do tipo '{tabela_simbolos[valor]}'.")
+            elif not isinstance(valor, int):
+                raise Exception(f"Comando '{type(comando).__name__}' espera valor inteiro, mas recebeu '{valor}'.")
+        elif isinstance(comando, (NodoLevantarCaneta, NodoAbaixarCaneta, NodoLimparTela)):
+            pass
+        elif isinstance(comando, NodoEsperar):
+            valor = comando.valor
+            if isinstance(valor, str):
+                if valor not in tabela_simbolos:
+                    raise Exception(f"Variável '{valor}' não declarada antes do uso.")
+                if tabela_simbolos[valor] != "inteiro":
+                    raise Exception(f"Comando 'esperar' espera inteiro, mas variável '{valor}' é do tipo '{tabela_simbolos[valor]}'.")
+            elif not isinstance(valor, int):
+                raise Exception(f"Comando 'esperar' espera valor inteiro, mas recebeu '{valor}'.")
+        elif isinstance(comando, NodoEscrever):
+            texto = comando.texto
+            if not isinstance(texto, str):
+                raise Exception(f"Comando 'escrever' espera texto, mas recebeu '{texto}'.")
     print("Análise semântica OK")
-
-def tipo_expressao(expr, tabela_simbolos):
-    from parser import NodoBinOp
-    if isinstance(expr, int):
-        return "inteiro"
-    if isinstance(expr, str):
-        if expr in tabela_simbolos:
-            return tabela_simbolos[expr]
-        else:
-            raise Exception(f"Variável '{expr}' não declarada antes do uso.")
-    if isinstance(expr, NodoBinOp):
-        tipo_esq = tipo_expressao(expr.esquerda, tabela_simbolos)
-        tipo_dir = tipo_expressao(expr.direita, tabela_simbolos)
-        if tipo_esq != "inteiro" or tipo_dir != "inteiro":
-            raise Exception("Operações aritméticas só são permitidas entre inteiros.")
-        return "inteiro"
-    raise Exception("Expressão inválida para verificação de tipo.")
 
 if __name__ == "__main__":
     with open("entrada1.txt") as f:
