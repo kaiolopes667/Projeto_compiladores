@@ -1,0 +1,37 @@
+inicio
+var inteiro : i;
+var texto : nome;
+var inteiro : raio;
+
+nome = "Flor";
+raio = 60;
+cor_de_fundo "white";
+definir_cor "magenta";
+definir_espessura 2;
+ir_para 0 0;
+esperar 1;
+
+repita 6 vezes
+    repita 36 vezes
+        avancar 10;
+        girar_esquerda 10;
+    fim_repita;
+    girar_esquerda 60;
+    esperar 1;
+fim_repita;
+
+definir_cor "cyan";
+girar_direita 90;
+levantar_caneta;
+avancar 110;
+abaixar_caneta;
+avancar 120;
+levantar_caneta;
+avancar 20;
+abaixar_caneta;
+escrever nome;
+levantar_caneta;
+recuar 250;
+esperar 10;
+limpar_tela;
+fim

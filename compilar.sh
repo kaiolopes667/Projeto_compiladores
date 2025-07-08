@@ -17,3 +17,6 @@ python saida5.py
 
 python main.py entrada6.txt saida6.py
 python saida6.py
+
+python main.py entrada7.txt saida7.py
+python saida7.py
