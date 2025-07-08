@@ -83,6 +83,48 @@ class NodoBinOp:
     def __repr__(self):
         return f"NodoBinOp({self.op}, {self.esquerda}, {self.direita})"
 
+class NodoRecuar:
+    """Comando recuar <valor>;"""
+    def __init__(self, valor):
+        self.valor = valor
+    def __repr__(self):
+        return f"NodoRecuar({self.valor})"
+
+class NodoGirarEsquerda:
+    """Comando girar_esquerda <valor>;"""
+    def __init__(self, valor):
+        self.valor = valor
+    def __repr__(self):
+        return f"NodoGirarEsquerda({self.valor})"
+
+class NodoLevantarCaneta:
+    """Comando levantar_caneta;"""
+    def __repr__(self):
+        return "NodoLevantarCaneta()"
+
+class NodoAbaixarCaneta:
+    """Comando abaixar_caneta;"""
+    def __repr__(self):
+        return "NodoAbaixarCaneta()"
+
+class NodoLimparTela:
+    """Comando limpar_tela;"""
+    def __repr__(self):
+        return "NodoLimparTela()"
+
+class NodoEsperar:
+    """Comando esperar <valor>;"""
+    def __init__(self, valor):
+        self.valor = valor
+    def __repr__(self):
+        return f"NodoEsperar({self.valor})"
+
+class NodoEscrever:
+    """Comando escrever <texto>;"""
+    def __init__(self, texto):
+        self.texto = texto
+    def __repr__(self):
+        return f"NodoEscrever({self.texto})"
 
 def parser(tokens):
     pos = 0  # posição atual na lista de tokens
@@ -112,11 +154,48 @@ def parser(tokens):
             valor = parse_expressao()
             consumir("PONTO_VIRGULA")
             return NodoAvancar(valor)
+        elif tokens[pos].valor == "recuar":
+            consumir("PALAVRA_CHAVE", "recuar")
+            valor = parse_expressao()
+            consumir("PONTO_VIRGULA")
+            return NodoRecuar(valor)
         elif tokens[pos].valor == "girar_direita":
             consumir("PALAVRA_CHAVE", "girar_direita")
             valor = parse_expressao()
             consumir("PONTO_VIRGULA")
             return NodoGirarDireita(valor)
+        elif tokens[pos].valor == "girar_esquerda":
+            consumir("PALAVRA_CHAVE", "girar_esquerda")
+            valor = parse_expressao()
+            consumir("PONTO_VIRGULA")
+            return NodoGirarEsquerda(valor)
+        elif tokens[pos].valor == "levantar_caneta":
+            consumir("PALAVRA_CHAVE", "levantar_caneta")
+            consumir("PONTO_VIRGULA")
+            return NodoLevantarCaneta()
+        elif tokens[pos].valor == "abaixar_caneta":
+            consumir("PALAVRA_CHAVE", "abaixar_caneta")
+            consumir("PONTO_VIRGULA")
+            return NodoAbaixarCaneta()
+        elif tokens[pos].valor == "limpar_tela":
+            consumir("PALAVRA_CHAVE", "limpar_tela")
+            consumir("PONTO_VIRGULA")
+            return NodoLimparTela()
+        elif tokens[pos].valor == "esperar":
+            consumir("PALAVRA_CHAVE", "esperar")
+            valor = parse_expressao()
+            consumir("PONTO_VIRGULA")
+            return NodoEsperar(valor)
+        elif tokens[pos].valor == "escrever":
+            consumir("PALAVRA_CHAVE", "escrever")
+            if tokens[pos].tipo == "TEXTO":
+                texto = consumir("TEXTO").valor
+            elif tokens[pos].tipo == "IDENT":
+                texto = consumir("IDENT").valor
+            else:
+                raise Exception(f"Esperado TEXTO ou IDENT, encontrado {tokens[pos].tipo} '{tokens[pos].valor}' na linha {tokens[pos].linha}")
+            consumir("PONTO_VIRGULA")
+            return NodoEscrever(texto)
         elif tokens[pos].valor == "definir_cor":
             consumir("PALAVRA_CHAVE", "definir_cor")
             cor = consumir("TEXTO")
@@ -187,6 +266,8 @@ def parser(tokens):
             return consumir("NUMERO").valor
         elif tokens[pos].tipo == "IDENT":
             return consumir("IDENT").valor
+        elif tokens[pos].tipo == "TEXTO":
+            return consumir("TEXTO").valor
         else:
             raise Exception(f"Valor inválido: {tokens[pos].valor} na linha {tokens[pos].linha}")
 
