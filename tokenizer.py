@@ -12,9 +12,11 @@ PALAVRAS_CHAVE = {
     "inicio", "fim", "var", "inteiro", "texto", "real", "logico",
     "avancar", "recuar", "girar_direita", "girar_esquerda", "repita", "vezes", "se", "entao", "senao", "fim_se",
     "definir_cor", "cor_de_fundo", "definir_espessura", "ir_para", "fim_repita",
-    "levantar_caneta", "abaixar_caneta", "limpar_tela", "esperar", "escrever"
+    "levantar_caneta", "abaixar_caneta", "limpar_tela", "esperar", "escrever",
+    "verdadeiro", "falso"
 }
 
+# Mapeamento de símbolos para tipos de token
 OPERADORES = {
     '+': 'MAIS',
     '-': 'MENOS',
@@ -27,12 +29,16 @@ def tokenize(codigo):
     linhas = codigo.split('\n')
     for num_linha, linha in enumerate(linhas, 1):
         linha = linha.split('//')[0]
-        partes = re.findall(r'\w+|".*?"|\d+|[=;:+\-*/:]', linha)
+        partes = re.findall(r'".*?"|\d+\.\d+|\d+|\w+|[=;:+\-*/:]', linha)
         for parte in partes:
             if not parte.strip():
                 continue  # ignora strings vazias
-            if parte in PALAVRAS_CHAVE:
+            if parte == "verdadeiro" or parte == "falso":
+                tokens.append(Token("LOGICO", parte == "verdadeiro", num_linha))
+            elif parte in PALAVRAS_CHAVE:
                 tokens.append(Token("PALAVRA_CHAVE", parte, num_linha))
+            elif re.match(r'^\d+\.\d+$', parte):
+                tokens.append(Token("REAL", float(parte), num_linha))
             elif parte in OPERADORES:
                 tokens.append(Token(OPERADORES[parte], parte, num_linha))
             elif parte.isdigit():

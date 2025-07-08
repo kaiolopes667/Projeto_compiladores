@@ -1,4 +1,4 @@
-from parser import NodoAvancar, NodoGirarDireita, NodoDefinirCor, NodoCorDeFundo, NodoDefinirEspessura, NodoAtribuicao, NodoVar, NodoIrPara, NodoRepita, NodoRecuar, NodoGirarEsquerda, NodoLevantarCaneta, NodoAbaixarCaneta, NodoLimparTela, NodoEsperar, NodoEscrever
+from parser import NodoAvancar, NodoGirarDireita, NodoDefinirCor, NodoCorDeFundo, NodoDefinirEspessura, NodoAtribuicao, NodoVar, NodoIrPara, NodoRepita, NodoRecuar, NodoGirarEsquerda, NodoLevantarCaneta, NodoAbaixarCaneta, NodoLimparTela, NodoEsperar, NodoEscrever, NodoSe
 
 def gerar_codigo(ast, saida="saida.py"):
     linhas = [
@@ -18,16 +18,16 @@ def gerar_codigo(ast, saida="saida.py"):
             valor = comando.valor
             if isinstance(valor, str):
                 linhas.append(f'{prefix}{comando.nome} = "{valor}"')
+            elif isinstance(valor, bool):
+                linhas.append(f'{prefix}{comando.nome} = {str(valor)}')
             else:
-                linhas.append(f"{prefix}{comando.nome} = {valor}")
+                linhas.append(f"{prefix}{comando.nome} = {gerar_expr(valor)}")
         # Comando avancar
         elif isinstance(comando, NodoAvancar):
-            valor = comando.valor if isinstance(comando.valor, int) else comando.valor
-            linhas.append(f"{prefix}t.forward({valor})")
+            linhas.append(f"{prefix}t.forward({gerar_expr(comando.valor)})")
         # Comando girar_direita
         elif isinstance(comando, NodoGirarDireita):
-            valor = comando.valor if isinstance(comando.valor, int) else comando.valor
-            linhas.append(f"{prefix}t.right({valor})")
+            linhas.append(f"{prefix}t.right({gerar_expr(comando.valor)})")
         # Comando definir_cor
         elif isinstance(comando, NodoDefinirCor):
             linhas.append(f"{prefix}t.pencolor(\"{comando.cor}\")")
@@ -36,7 +36,7 @@ def gerar_codigo(ast, saida="saida.py"):
             linhas.append(f"{prefix}screen.bgcolor(\"{comando.cor}\")")
         # Comando definir_espessura
         elif isinstance(comando, NodoDefinirEspessura):
-            linhas.append(f"{prefix}t.pensize({comando.espessura})")
+            linhas.append(f"{prefix}t.pensize({gerar_expr(comando.espessura)})")
         # Comando ir_para
         elif isinstance(comando, NodoIrPara):
             linhas.append(f"{prefix}t.goto({comando.x}, {comando.y})")
@@ -47,12 +47,10 @@ def gerar_codigo(ast, saida="saida.py"):
                 gerar_comando(filho, indent + 1)
         # Comando recuar
         elif isinstance(comando, NodoRecuar):
-            valor = comando.valor if isinstance(comando.valor, int) else comando.valor
-            linhas.append(f"{prefix}t.backward({valor})")
+            linhas.append(f"{prefix}t.backward({gerar_expr(comando.valor)})")
         # Comando girar_esquerda
         elif isinstance(comando, NodoGirarEsquerda):
-            valor = comando.valor if isinstance(comando.valor, int) else comando.valor
-            linhas.append(f"{prefix}t.left({valor})")
+            linhas.append(f"{prefix}t.left({gerar_expr(comando.valor)})")
         # Comando levantar_caneta
         elif isinstance(comando, NodoLevantarCaneta):
             linhas.append(f"{prefix}t.penup()")
@@ -64,7 +62,7 @@ def gerar_codigo(ast, saida="saida.py"):
             linhas.append(f"{prefix}t.clear()")
         # Comando esperar
         elif isinstance(comando, NodoEsperar):
-            linhas.append(f"{prefix}turtle.time.sleep({comando.valor})")
+            linhas.append(f"{prefix}turtle.time.sleep({gerar_expr(comando.valor)})")
         # Comando escrever
         elif isinstance(comando, NodoEscrever):
             texto = comando.texto
@@ -72,6 +70,29 @@ def gerar_codigo(ast, saida="saida.py"):
                 linhas.append(f"{prefix}t.write({texto})")
             else:
                 linhas.append(f'{prefix}t.write("{texto}")')
+        elif isinstance(comando, NodoSe):
+            cond = comando.condicao
+            if isinstance(cond, bool):
+                cond_str = str(cond)
+            else:
+                cond_str = cond
+            linhas.append(f"{prefix}if {cond_str}:")
+            for c in comando.bloco_entao:
+                gerar_comando(c, indent + 1)
+            if comando.bloco_senao:
+                linhas.append(f"{prefix}else:")
+                for c in comando.bloco_senao:
+                    gerar_comando(c, indent + 1)
+    def gerar_expr(expr):
+        from parser import NodoBinOp
+        if isinstance(expr, NodoBinOp):
+            esq = gerar_expr(expr.esquerda)
+            dir = gerar_expr(expr.direita)
+            return f"({esq} {expr.op} {dir})"
+        elif isinstance(expr, str):
+            return expr
+        else:
+            return str(expr)
     for comando in ast.comandos:
         gerar_comando(comando)
     linhas.append("turtle.done()")

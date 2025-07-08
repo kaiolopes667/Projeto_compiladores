@@ -126,6 +126,14 @@ class NodoEscrever:
     def __repr__(self):
         return f"NodoEscrever({self.texto})"
 
+class NodoSe:
+    """Comando condicional: se <expr_logica> entao ... [senao ...] fim_se"""
+    def __init__(self, condicao, bloco_entao, bloco_senao=None):
+        self.condicao = condicao
+        self.bloco_entao = bloco_entao
+        self.bloco_senao = bloco_senao
+    def __repr__(self):
+        return f"NodoSe({self.condicao}, {self.bloco_entao}, {self.bloco_senao})"
 def parser(tokens):
     pos = 0  # posição atual na lista de tokens
     def consumir(tipo_esperado, valor_esperado=None):
@@ -192,8 +200,10 @@ def parser(tokens):
                 texto = consumir("TEXTO").valor
             elif tokens[pos].tipo == "IDENT":
                 texto = consumir("IDENT").valor
+            elif tokens[pos].tipo == "LOGICO":
+                texto = consumir("LOGICO").valor
             else:
-                raise Exception(f"Esperado TEXTO ou IDENT, encontrado {tokens[pos].tipo} '{tokens[pos].valor}' na linha {tokens[pos].linha}")
+                raise Exception(f"Esperado TEXTO, IDENT ou LOGICO, encontrado {tokens[pos].tipo} '{tokens[pos].valor}' na linha {tokens[pos].linha}")
             consumir("PONTO_VIRGULA")
             return NodoEscrever(texto)
         elif tokens[pos].valor == "definir_cor":
@@ -234,6 +244,22 @@ def parser(tokens):
             nome = consumir("IDENT")
             consumir("PONTO_VIRGULA") if pos < len(tokens) and tokens[pos].tipo == "PONTO_VIRGULA" else None
             return NodoVar(nome.valor, tipo.valor)
+        elif tokens[pos].valor == "se":
+            consumir("PALAVRA_CHAVE", "se")
+            condicao = parse_expressao()
+            consumir("PALAVRA_CHAVE", "entao")
+            bloco_entao = []
+            while tokens[pos].valor not in ["senao", "fim_se"]:
+                bloco_entao.append(parse_comando())
+            bloco_senao = None
+            if tokens[pos].valor == "senao":
+                consumir("PALAVRA_CHAVE", "senao")
+                bloco_senao = []
+                while tokens[pos].valor != "fim_se":
+                    bloco_senao.append(parse_comando())
+            consumir("PALAVRA_CHAVE", "fim_se")
+            consumir("PONTO_VIRGULA") if pos < len(tokens) and tokens[pos].tipo == "PONTO_VIRGULA" else None
+            return NodoSe(condicao, bloco_entao, bloco_senao)
         elif tokens[pos].tipo == "IDENT":
             nome = consumir("IDENT")
             consumir("IGUAL")
@@ -264,10 +290,14 @@ def parser(tokens):
     def parse_fator():
         if tokens[pos].tipo == "NUMERO":
             return consumir("NUMERO").valor
+        elif tokens[pos].tipo == "REAL":
+            return consumir("REAL").valor
         elif tokens[pos].tipo == "IDENT":
             return consumir("IDENT").valor
         elif tokens[pos].tipo == "TEXTO":
             return consumir("TEXTO").valor
+        elif tokens[pos].tipo == "LOGICO":
+            return consumir("LOGICO").valor
         else:
             raise Exception(f"Valor inválido: {tokens[pos].valor} na linha {tokens[pos].linha}")
 
