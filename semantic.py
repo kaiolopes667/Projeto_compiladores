@@ -71,7 +71,6 @@ def analisar_semantica(ast, tabela_simbolos=None):
             texto = comando.texto
             if not isinstance(texto, str):
                 raise Exception(f"Comando 'escrever' espera texto, mas recebeu '{texto}'.")
-    print("Análise semântica OK")
 
 if __name__ == "__main__":
     with open("entrada1.txt") as f:

@@ -22,18 +22,21 @@ except FileNotFoundError:
 
 try:
     tokens = tokenize(codigo)
+    print("Análise léxica OK")
 except Exception as e:
     print(f"Erro léxico: {e}")
     exit(1)
 
 try:
     ast = parser(tokens)
+    print("Análise sintática OK")
 except Exception as e:
     print(f"Erro sintático: {e}")
     exit(1)
 
 try:
     analisar_semantica(ast)
+    print("Análise semântica OK")
 except Exception as e:
     print(f"Erro semântico: {e}")
     exit(1)
