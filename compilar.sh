@@ -20,3 +20,6 @@ python saida6.py
 
 python main.py entrada7.txt saida7.py
 python saida7.py
+
+python main.py entrada8.txt saida8.py
+python saida8.py
