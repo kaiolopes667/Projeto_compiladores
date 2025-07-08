@@ -1,0 +1,38 @@
+inicio
+var inteiro : lado;
+var real : raio;
+var texto : nome;
+var logico : testeIf;
+
+lado = 120;
+raio = 40.0;
+nome = "Quadrado";
+testeIf = verdadeiro;
+
+definir_cor "blue";
+definir_espessura 3;
+cor_de_fundo "white";
+
+escrever nome;
+esperar 1;
+
+repita 4 vezes
+    avancar lado;
+    girar_direita 90;
+fim_repita;
+
+levantar_caneta;
+girar_direita 90;
+avancar lado / 2;
+girar_esquerda 90;
+avancar lado / 2;
+abaixar_caneta;
+
+se testeIf entao
+
+    escrever "Entrou";
+senao
+    escrever "Não entrou";
+fim_se;
+
+fim
