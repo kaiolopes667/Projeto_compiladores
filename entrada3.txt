@@ -1,6 +1,6 @@
 inicio
-    var inteiro : lado;
-    var texto : cor;
+    var inteiro: lado;
+    var texto: cor;
 
     lado = 5;
     cor_de_fundo "black";
@@ -11,7 +11,7 @@ inicio
     definir_cor "cyan";
 
     // Desenha e aumenta o lado
-    avancar lado ;
+    avancar lado;
     girar_direita 90;
     lado = lado + 5;
     fim_repita;
