@@ -29,7 +29,7 @@ def tokenize(codigo):
     linhas = codigo.split('\n')
     for num_linha, linha in enumerate(linhas, 1):
         linha = linha.split('//')[0]
-        partes = re.findall(r'".*?"|\d+\.\d+|\d+|\w+|[=;:+\-*/:]', linha)
+        partes = re.findall(r'".*?"|\d+\.\d+|\d+[a-zA-Z_]\w*|\d+|[a-zA-Z_][a-zA-Z_]*|[=;:+\-*/:]|.', linha)
         for parte in partes:
             if not parte.strip():
                 continue  # ignora strings vazias
@@ -41,6 +41,8 @@ def tokenize(codigo):
                 tokens.append(Token("REAL", float(parte), num_linha))
             elif parte in OPERADORES:
                 tokens.append(Token(OPERADORES[parte], parte, num_linha))
+            elif re.match(r'^\d+[a-zA-Z_]\w*$', parte):
+                raise Exception(f"Identificador inválido '{parte}' na linha {num_linha}")
             elif parte.isdigit():
                 tokens.append(Token("NUMERO", int(parte), num_linha))
             elif parte.startswith('"') and parte.endswith('"'):
@@ -51,7 +53,7 @@ def tokenize(codigo):
                 tokens.append(Token("PONTO_VIRGULA", parte, num_linha))
             elif parte == ':':
                 tokens.append(Token("DOIS_PONTOS", parte, num_linha))
-            elif re.match(r'^[a-zA-Z_]\w*$', parte):
+            elif re.match(r'^[a-zA-Z_][a-zA-Z_]*$', parte):
                 tokens.append(Token("IDENT", parte, num_linha))
             else:
                 raise Exception(f"Token inválido '{parte}' na linha {num_linha}")
